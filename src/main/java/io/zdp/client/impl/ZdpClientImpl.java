@@ -28,7 +28,7 @@ import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.FloatValue;
 import io.zdp.api.model.TransactionDetailsRequest;
-import io.zdp.api.model.TransactionDetailsResponse;
+import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransactionListRequest;
 import io.zdp.api.model.TransferRequest;
 import io.zdp.api.model.TransferResponse;
@@ -185,12 +185,12 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public TransactionDetailsResponse getTransaction(TransactionDetailsRequest req) throws Exception {
+	public TransferDetails getTransaction(TransactionDetailsRequest req) throws Exception {
 		return null;
 	}
 
 	@Override
-	public List<TransactionDetailsResponse> getTransactions(TransactionListRequest req) throws Exception {
+	public List<TransferDetails> getTransactions(TransactionListRequest req) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -7,7 +7,7 @@ import java.util.Map;
 import io.zdp.api.model.AddressDetailsResponse;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.TransactionDetailsRequest;
-import io.zdp.api.model.TransactionDetailsResponse;
+import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransactionListRequest;
 import io.zdp.api.model.TransferResponse;
 
@@ -51,11 +51,11 @@ public interface ZdpClient {
 	/**
 	 * Get transaction details by tx uuid
 	 */
-	TransactionDetailsResponse getTransaction(TransactionDetailsRequest req) throws Exception;
+	TransferDetails getTransaction(TransactionDetailsRequest req) throws Exception;
 
 	/**
 	 * List transactions by "from/to" address, sort by date
 	 */
-	List<TransactionDetailsResponse> getTransactions(TransactionListRequest req) throws Exception;
+	List<TransferDetails> getTransactions(TransactionListRequest req) throws Exception;
 
 }
