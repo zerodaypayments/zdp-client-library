@@ -1,5 +1,6 @@
 package io.zdp.client.impl;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.security.PrivateKey;
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class ZdpClientImpl implements ZdpClient {
 	 * java.lang.String)
 	 */
 	@Override
-	public TransferResponse transfer(PrivateKey privateKey, String from, String to, double amount, String fromRef, String toRef) throws Exception {
+	public TransferResponse transfer(PrivateKey privateKey, String from, String to, BigDecimal amount, String fromRef, String toRef) throws Exception {
 
 		URI uri = new URI(hostUrl + URL_TRANSFER);
 
@@ -115,7 +116,7 @@ public class ZdpClientImpl implements ZdpClient {
 		req.setFromAddress(from);
 		req.setToAddress(to);
 
-		req.setAmountToSend(amount);
+		req.setAmount(amount);
 
 		req.setRecipientReference(toRef);
 		req.setSenderReference(fromRef);

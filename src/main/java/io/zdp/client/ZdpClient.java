@@ -1,5 +1,6 @@
 package io.zdp.client;
 
+import java.math.BigDecimal;
 import java.security.PrivateKey;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public interface ZdpClient {
 	/**
 	 * Submit transfer request
 	 */
-	TransferResponse transfer(PrivateKey privateKey, String from, String to, double amount, String fromRef, String toRef) throws Exception;
+	TransferResponse transfer(PrivateKey privateKey, String from, String to, BigDecimal amount, String fromRef, String toRef) throws Exception;
 
 	/**
 	 * Get address balance
