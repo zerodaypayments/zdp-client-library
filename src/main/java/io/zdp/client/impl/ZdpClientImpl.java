@@ -27,9 +27,8 @@ import io.zdp.api.model.AddressDetailsResponse;
 import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.FloatValue;
-import io.zdp.api.model.TransactionDetailsRequest;
-import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransactionListRequest;
+import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferRequest;
 import io.zdp.api.model.TransferResponse;
 import io.zdp.client.ZdpClient;
@@ -185,7 +184,7 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public TransferDetails getTransaction(TransactionDetailsRequest req) throws Exception {
+	public TransferDetails getTransaction(String uuid) throws Exception {
 		return null;
 	}
 

@@ -6,9 +6,8 @@ import java.util.Map;
 
 import io.zdp.api.model.AddressDetailsResponse;
 import io.zdp.api.model.BalanceResponse;
-import io.zdp.api.model.TransactionDetailsRequest;
-import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransactionListRequest;
+import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferResponse;
 
 public interface ZdpClient {
@@ -51,7 +50,7 @@ public interface ZdpClient {
 	/**
 	 * Get transaction details by tx uuid
 	 */
-	TransferDetails getTransaction(TransactionDetailsRequest req) throws Exception;
+	TransferDetails getTransaction(String uuid) throws Exception;
 
 	/**
 	 * List transactions by "from/to" address, sort by date
