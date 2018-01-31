@@ -211,13 +211,13 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public float getFee() throws Exception {
+	public BigDecimal getFee() throws Exception {
 
 		final URI uri = new URI(hostUrl + URL_GET_TX_FEE);
 
 		log.debug("Get fee: " + uri);
 
-		return restTemplate.getForObject(uri, FloatValue.class).getValue();
+		return restTemplate.getForObject(uri, BigDecimal.class);
 
 	}
 

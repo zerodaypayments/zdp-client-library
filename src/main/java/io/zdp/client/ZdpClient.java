@@ -21,7 +21,7 @@ public interface ZdpClient {
 	/**
 	 * Get Transaction fee from server
 	 */
-	float getFee() throws Exception;
+	BigDecimal getFee() throws Exception;
 
 	/**
 	 * Create new address
