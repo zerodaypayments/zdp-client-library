@@ -4,6 +4,7 @@ import java.security.KeyPair;
 
 import org.junit.Test;
 
+import io.zdp.api.model.BalanceResponse;
 import io.zdp.client.impl.ZdpClientImpl;
 import io.zdp.common.crypto.CryptoUtils;
 import junit.framework.TestCase;
@@ -21,11 +22,13 @@ public class TestZdpClient extends TestCase {
 		
 		System.out.println(zdp.getFee());
 		
-		String seed = "836b35a304b3c4607e33d92958ab7ace5ca246bf16b43ae63bce9526caea73c4";//CryptoUtils.generateRandomNumber256bits();
+		String seed = "116b35a304b3c4607e33d92958ab7ace5ca246bf16b43ae63bce9526caea73c4";//CryptoUtils.generateRandomNumber256bits();
 		System.out.println(seed);
 		KeyPair keys = CryptoUtils.generateKeys(seed);
 		
-		zdp.getAddressBalance(keys.getPublic().getEncoded(),keys.getPrivate().getEncoded());
+		BalanceResponse resp = zdp.getAddressBalance(keys.getPublic().getEncoded(),keys.getPrivate().getEncoded());
+		
+		System.out.println(resp);
 		
 		/*
 		String seed=CryptoUtils.generateRandomNumber(256);
