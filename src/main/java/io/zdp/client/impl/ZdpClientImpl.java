@@ -3,12 +3,12 @@ package io.zdp.client.impl;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.TransferDetails;
+import io.zdp.api.model.TransferRequest;
 import io.zdp.api.model.TransferResponse;
 import io.zdp.client.ZdpClient;
 import io.zdp.common.crypto.CryptoUtils;
@@ -61,25 +62,37 @@ public class ZdpClientImpl implements ZdpClient {
 	 * java.lang.String)
 	 */
 	@Override
-	public TransferResponse transfer(byte[] publicKey, byte[] privateKey, String from, String to, BigDecimal amount, String fromRef, String toRef) throws Exception {
-		/*
-		 * URI uri = new URI(hostUrl + URL_TRANSFER);
-		 * 
-		 * log.debug("transfer: " + uri);
-		 * 
-		 * TransferRequest req = new TransferRequest(); req.setDate(new Date());
-		 * 
-		 * 
-		 * req.setAmount(amount);
-		 * 
-		 * req.setRecipientReference(toRef); req.setSenderReference(fromRef);
-		 * 
-		 * byte[] signature = Signer.sign(privateKey, DigestUtils.sha256Hex(from
-		 * + to + amount)); req.setSignature(signature);
-		 * 
-		 * return restTemplate.postForObject(uri, req, TransferResponse.class);
-		 */
-		return null;
+	public TransferResponse transfer(byte[] publicKey, byte[] privateKey, String to, BigDecimal amount, String fromRef, String toRef) throws Exception {
+
+		URI uri = new URI(hostUrl + URL_TRANSFER);
+
+		log.debug("transfer: " + uri);
+
+		String fromAddress = Signer.getPublicKeyHash(publicKey);
+
+		TransferRequest req = new TransferRequest();
+
+		req.setAmount(amount);
+		req.setDate(new Date());
+		req.setPublicKey(publicKey);
+		req.setRecipientReference(toRef);
+		req.setSenderReference(fromRef);
+
+		PrivateKey priv = Signer.generatePrivateKey(privateKey);
+		byte[] signature = Signer.sign(priv, DigestUtils.sha256Hex(fromAddress + to + amount));
+		req.setSignature(signature);
+
+		req.setToAddressEncrypted(CryptoUtils.encrypt(priv, to));
+		
+		req.setRecipientReference(toRef);
+		req.setSenderReference(fromRef);
+
+		req.setSignedFromAddress(Signer.sign(priv, fromAddress));
+
+		req.setSignature(signature);
+
+		return restTemplate.postForObject(uri, req, TransferResponse.class);
+
 	}
 
 	@Override

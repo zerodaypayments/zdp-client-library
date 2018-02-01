@@ -24,7 +24,7 @@ public interface ZdpClient {
 	/**
 	 * Submit transfer request
 	 */
-	TransferResponse transfer(byte[] publicKey, byte[] privateKey, String from, String to, BigDecimal amount, String fromRef, String toRef) throws Exception;
+	TransferResponse transfer(byte[] publicKey, byte[] privateKey, String to, BigDecimal amount, String fromRef, String toRef) throws Exception;
 
 	/**
 	 * Get address balance
