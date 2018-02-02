@@ -21,7 +21,7 @@ public class TestZdpClientBalance extends TestCase {
 		System.out.println(zdp.ping());
 
 		System.out.println(zdp.getFee());
-
+/*
 		{
 			String seed1 = "116b35a304b3c4607e33d92958ab7ace5ca246bf16b43ae63bce9526caea73c4";
 			KeyPair keys1 = CryptoUtils.generateKeys(seed1);
@@ -35,6 +35,12 @@ public class TestZdpClientBalance extends TestCase {
 			KeyPair keys1 = CryptoUtils.generateKeys(seed1);
 			BalanceResponse resp1 = zdp.getAddressBalance(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded());
 			System.out.println(resp1);
+		}
+		*/
+		for (int i=0; i<100000;i++) {
+			String seed1 = CryptoUtils.generateRandomNumber256bits();
+			KeyPair keys1 = CryptoUtils.generateKeys(seed1);
+			BalanceResponse resp1 = zdp.getAddressBalance(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded());
 		}
 
 	}

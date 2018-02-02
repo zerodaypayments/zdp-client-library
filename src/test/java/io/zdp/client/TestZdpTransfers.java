@@ -36,9 +36,11 @@ public class TestZdpTransfers extends TestCase {
 		System.out.println(resp2.getBalance());
 
 		// 1 -> 2 50 coins
-		BigDecimal amount = BigDecimal.valueOf(50);
+		BigDecimal amount = BigDecimal.valueOf(54191);
 
 		TransferResponse resp = zdp.transfer(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded(), Signer.getPublicKeyHash(keys2.getPublic()), amount, "ref1", "to ref2");
+		
+		assertNotNull(resp.getDate() );
 
 		System.out.println(resp);
 
