@@ -2,7 +2,10 @@ package io.zdp.client.impl;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -83,7 +86,7 @@ public class ZdpClientImpl implements ZdpClient {
 		req.setSignature(signature);
 
 		req.setToAddressEncrypted(CryptoUtils.encrypt(priv, to));
-		
+
 		req.setRecipientReference(toRef);
 		req.setSenderReference(fromRef);
 
@@ -129,6 +132,29 @@ public class ZdpClientImpl implements ZdpClient {
 	@Override
 	public BalanceResponse getAddressBalance(final byte[] publicKeyBytes, final byte[] privateKeyBytes) throws Exception {
 
+		final BalanceRequest req = createRequest(publicKeyBytes, privateKeyBytes);
+
+		final URI uri = new URI(hostUrl + URL_GET_ADDRESS_BALANCE);
+
+		return restTemplate.postForObject(uri, req, BalanceResponse.class);
+	}
+
+	@Override
+	public List<BalanceResponse> getAddressesBalances(final List<Pair<byte[], byte[]>> keyPairs) throws Exception {
+
+		List<BalanceRequest> requests = new ArrayList<>();
+
+		for (Pair<byte[], byte[]> pair : keyPairs) {
+			requests.add(createRequest(pair.getLeft(), pair.getRight()));
+		}
+
+		final URI uri = new URI(hostUrl + URL_GET_ADDRESSES_BALANCES);
+
+		return restTemplate.postForObject(uri, requests, List.class);
+
+	}
+
+	private BalanceRequest createRequest(final byte[] publicKeyBytes, final byte[] privateKeyBytes) throws InvalidKeySpecException, NoSuchAlgorithmException, Exception {
 		// Generate address from public key
 		final String address = Signer.getPublicKeyHash(publicKeyBytes);
 
@@ -140,17 +166,8 @@ public class ZdpClientImpl implements ZdpClient {
 		req.setPublicKey(publicKeyBytes);
 		req.setSignedAddress(signature);
 
-		final URI uri = new URI(hostUrl + URL_GET_ADDRESS_BALANCE);
-
 		log.debug("Get balance: " + address);
-
-		return restTemplate.postForObject(uri, req, BalanceResponse.class);
-	}
-
-	@Override
-	public List<BalanceResponse> getAddressesBalances(List<Pair<byte[], byte[]>> keyPairs) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return req;
 	}
 
 }
