@@ -8,6 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -21,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
+import io.zdp.api.model.BalancesResponse;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferRequest;
 import io.zdp.api.model.TransferResponse;
@@ -140,7 +142,7 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public List<BalanceResponse> getAddressesBalances(final List<Pair<byte[], byte[]>> keyPairs) throws Exception {
+	public BalancesResponse getAddressesBalances(final List<Pair<byte[], byte[]>> keyPairs) throws Exception {
 
 		List<BalanceRequest> requests = new ArrayList<>();
 
@@ -150,7 +152,9 @@ public class ZdpClientImpl implements ZdpClient {
 
 		final URI uri = new URI(hostUrl + URL_GET_ADDRESSES_BALANCES);
 
-		return restTemplate.postForObject(uri, requests, List.class);
+		BalancesResponse response = restTemplate.postForObject(uri, requests, BalancesResponse.class);
+
+		return response;
 
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 
 import io.zdp.api.model.BalanceResponse;
+import io.zdp.api.model.BalancesResponse;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferResponse;
 
@@ -34,7 +35,7 @@ public interface ZdpClient {
 	/**
 	 * Get addresses balance
 	 */
-	List<BalanceResponse> getAddressesBalances(List<Pair<byte[], byte[]>> keyPairs) throws Exception;
+	BalancesResponse getAddressesBalances(List<Pair<byte[], byte[]>> keyPairs) throws Exception;
 
 	/**
 	 * Get transaction details by tx uuid
