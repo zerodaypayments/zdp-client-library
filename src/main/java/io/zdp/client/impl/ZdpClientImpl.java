@@ -8,7 +8,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -23,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.BalancesResponse;
+import io.zdp.api.model.Key;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferRequest;
 import io.zdp.api.model.TransferResponse;
@@ -45,6 +45,8 @@ public class ZdpClientImpl implements ZdpClient {
 	private static final String URL_GET_TX_FEE = "/api/v1/fee";
 	private static final String URL_TRANSFER = "/api/v1/transfer";
 	private static final String URL_GET_TX_DETAILS = "/api/v1/tx";
+
+	private static final String URL_GET_PUBLIC_KEY = "/api/v1/address/getPublicKey";
 
 	private static final String URL_GET_ADDRESS_BALANCE = "/api/v1/balance";
 	private static final String URL_GET_ADDRESSES_BALANCES = "/api/v1/balances";
@@ -172,6 +174,16 @@ public class ZdpClientImpl implements ZdpClient {
 
 		log.debug("Get balance: " + address);
 		return req;
+	}
+
+	@Override
+	public Key getPublicKey() throws Exception {
+
+		final URI uri = new URI(hostUrl + URL_GET_PUBLIC_KEY);
+
+		Key response = restTemplate.postForObject(uri, null, Key.class);
+
+		return response;
 	}
 
 }

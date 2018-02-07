@@ -7,6 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.BalancesResponse;
+import io.zdp.api.model.Key;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferResponse;
 
@@ -41,5 +42,10 @@ public interface ZdpClient {
 	 * Get transaction details by tx uuid
 	 */
 	TransferDetails getTransaction(String uuid) throws Exception;
+
+	/**
+	 * Get public key for address generation
+	 */
+	Key getPublicKey() throws Exception;
 
 }
