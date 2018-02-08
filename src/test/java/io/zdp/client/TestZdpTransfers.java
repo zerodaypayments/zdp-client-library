@@ -29,16 +29,20 @@ public class TestZdpTransfers extends TestCase {
 		KeyPair keys1 = CryptoUtils.generateKeys(seed1);
 		BalanceResponse resp1 = zdp.getAddressBalance(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded());
 		System.out.println(resp1.getBalance());
+		
+		String from = CryptoUtils.getUniqueAddressForAccountUuid(resp1.getAddress());
 
 		String seed2 = "2222222222222222222222222222222222222222222222222222222222222222";
 		KeyPair keys2 = CryptoUtils.generateKeys(seed2);
 		BalanceResponse resp2 = zdp.getAddressBalance(keys2.getPublic().getEncoded(), keys2.getPrivate().getEncoded());
 		System.out.println(resp2.getBalance());
+		
+		String to = CryptoUtils.getUniqueAddressForAccountUuid(resp2.getAddress());
 
 		// 1 -> 2 50 coins
-		BigDecimal amount = BigDecimal.valueOf(54191);
-
-		TransferResponse resp = zdp.transfer(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded(), Signer.getPublicKeyHash(keys2.getPublic()), amount, "ref1", "to ref2");
+		BigDecimal amount = BigDecimal.valueOf(40.12345678);
+		
+		TransferResponse resp = zdp.transfer(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded(), from, to, amount, "memo goes here");
 		
 		assertNotNull(resp.getDate() );
 

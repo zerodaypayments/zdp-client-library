@@ -46,10 +46,10 @@ public class ZdpClientImpl implements ZdpClient {
 	private static final String URL_TRANSFER = "/api/v1/transfer";
 	private static final String URL_GET_TX_DETAILS = "/api/v1/tx";
 
-	private static final String URL_GET_PUBLIC_KEY = "/api/v1/address/getPublicKey";
+	private static final String URL_GET_PUBLIC_KEY = "/api/v1/account/getPublicKey";
 
-	private static final String URL_GET_ADDRESS_BALANCE = "/api/v1/balance";
-	private static final String URL_GET_ADDRESSES_BALANCES = "/api/v1/balances";
+	private static final String URL_GET_ADDRESS_BALANCE = "/api/v1/account/balance";
+	private static final String URL_GET_ADDRESSES_BALANCES = "/api/v1/account/balances";
 
 	@PostConstruct
 	public void init() {
@@ -57,48 +57,6 @@ public class ZdpClientImpl implements ZdpClient {
 		log.debug("Host url: " + hostUrl);
 
 		restTemplate = new RestTemplate();
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.zerodaypayments.client.ZdpClient#transfer(java.security.PrivateKey,
-	 * java.lang.String, java.lang.String, double, java.lang.String,
-	 * java.lang.String)
-	 */
-	@Override
-	public TransferResponse transfer(byte[] publicKey, byte[] privateKey, String to, BigDecimal amount, String fromRef, String toRef) throws Exception {
-
-		URI uri = new URI(hostUrl + URL_TRANSFER);
-
-		log.debug("transfer: " + uri);
-
-		String fromAddress = Signer.getPublicKeyHash(publicKey);
-
-		TransferRequest req = new TransferRequest();
-
-		req.setAmount(amount);
-		req.setDate(new Date());
-		req.setPublicKey(publicKey);
-		req.setRecipientReference(toRef);
-		req.setSenderReference(fromRef);
-
-		PrivateKey priv = Signer.generatePrivateKey(privateKey);
-		byte[] signature = Signer.sign(priv, DigestUtils.sha256Hex(fromAddress + to + amount));
-		req.setSignature(signature);
-
-		req.setToAddressEncrypted(CryptoUtils.encrypt(priv, to));
-
-		req.setRecipientReference(toRef);
-		req.setSenderReference(fromRef);
-
-		req.setSignedFromAddress(Signer.sign(priv, fromAddress));
-
-		req.setSignature(signature);
-
-		return restTemplate.postForObject(uri, req, TransferResponse.class);
 
 	}
 
@@ -184,6 +142,32 @@ public class ZdpClientImpl implements ZdpClient {
 		Key response = restTemplate.postForObject(uri, null, Key.class);
 
 		return response;
+	}
+
+	@Override
+	public TransferResponse transfer(byte[] publicKey, byte[] privateKey, String from, String to, BigDecimal amount, String memo) throws Exception {
+
+		URI uri = new URI(hostUrl + URL_TRANSFER);
+
+		log.debug("transfer: " + uri);
+
+		TransferRequest req = new TransferRequest();
+
+		req.setAmount(amount.toString());
+		req.setDate(new Date());
+		req.setPublicKey(publicKey);
+		req.setMemo(memo);
+		req.setToAddress(to);
+		req.setFromAddress(from);
+
+		PrivateKey priv = Signer.generatePrivateKey(privateKey);
+
+		byte[] signature = Signer.sign(priv, DigestUtils.sha256Hex(from + amount + to));
+
+		req.setSignature(signature);
+
+		return restTemplate.postForObject(uri, req, TransferResponse.class);
+
 	}
 
 }
