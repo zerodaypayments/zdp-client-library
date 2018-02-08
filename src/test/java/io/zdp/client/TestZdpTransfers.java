@@ -9,7 +9,6 @@ import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.TransferResponse;
 import io.zdp.client.impl.ZdpClientImpl;
 import io.zdp.common.crypto.CryptoUtils;
-import io.zdp.common.crypto.Signer;
 import junit.framework.TestCase;
 
 public class TestZdpTransfers extends TestCase {
@@ -27,14 +26,14 @@ public class TestZdpTransfers extends TestCase {
 
 		String seed1 = "1111111111111111111111111111111111111111111111111111111111111111";
 		KeyPair keys1 = CryptoUtils.generateKeys(seed1);
-		BalanceResponse resp1 = zdp.getAddressBalance(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded());
+		BalanceResponse resp1 = zdp.getAccountBalance(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded());
 		System.out.println(resp1.getBalance());
 		
 		String from = CryptoUtils.getUniqueAddressForAccountUuid(resp1.getAddress());
 
 		String seed2 = "2222222222222222222222222222222222222222222222222222222222222222";
 		KeyPair keys2 = CryptoUtils.generateKeys(seed2);
-		BalanceResponse resp2 = zdp.getAddressBalance(keys2.getPublic().getEncoded(), keys2.getPrivate().getEncoded());
+		BalanceResponse resp2 = zdp.getAccountBalance(keys2.getPublic().getEncoded(), keys2.getPrivate().getEncoded());
 		System.out.println(resp2.getBalance());
 		
 		String to = CryptoUtils.getUniqueAddressForAccountUuid(resp2.getAddress());

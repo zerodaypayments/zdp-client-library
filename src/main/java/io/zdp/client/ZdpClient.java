@@ -29,14 +29,9 @@ public interface ZdpClient {
 	TransferResponse transfer(byte[] publicKey, byte[] privateKey, String from, String to, BigDecimal amount, String memo) throws Exception;
 
 	/**
-	 * Get address balance
+	 * Get account balance
 	 */
-	BalanceResponse getAddressBalance(byte[] publicKey, byte[] privateKey) throws Exception;
-
-	/**
-	 * Get addresses balance
-	 */
-	BalancesResponse getAddressesBalances(List<Pair<byte[], byte[]>> keyPairs) throws Exception;
+	BalanceResponse getAccountBalance(byte[] publicKey, byte[] privateKey) throws Exception;
 
 	/**
 	 * Get transaction details by tx uuid

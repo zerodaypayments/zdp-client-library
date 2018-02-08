@@ -1,12 +1,8 @@
 package io.zdp.client;
 
-import java.security.KeyPair;
-
 import org.junit.Test;
 
-import io.zdp.api.model.BalanceResponse;
 import io.zdp.client.impl.ZdpClientImpl;
-import io.zdp.common.crypto.CryptoUtils;
 import junit.framework.TestCase;
 
 public class TestZdpClientBalance extends TestCase {
@@ -37,11 +33,6 @@ public class TestZdpClientBalance extends TestCase {
 			System.out.println(resp1);
 		}
 		*/
-		for (int i=0; i<100000;i++) {
-			String seed1 = CryptoUtils.generateRandomNumber256bits();
-			KeyPair keys1 = CryptoUtils.generateKeys(seed1);
-			BalanceResponse resp1 = zdp.getAddressBalance(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded());
-		}
 
 	}
 

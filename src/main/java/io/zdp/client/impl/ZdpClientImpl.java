@@ -5,14 +5,11 @@ import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,13 +18,11 @@ import org.springframework.web.client.RestTemplate;
 
 import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
-import io.zdp.api.model.BalancesResponse;
 import io.zdp.api.model.Key;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferRequest;
 import io.zdp.api.model.TransferResponse;
 import io.zdp.client.ZdpClient;
-import io.zdp.common.crypto.CryptoUtils;
 import io.zdp.common.crypto.Signer;
 
 @Component
@@ -43,13 +38,14 @@ public class ZdpClientImpl implements ZdpClient {
 	private static final String URL_PING = "/ping";
 
 	private static final String URL_GET_TX_FEE = "/api/v1/fee";
+
 	private static final String URL_TRANSFER = "/api/v1/transfer";
+
 	private static final String URL_GET_TX_DETAILS = "/api/v1/tx";
 
 	private static final String URL_GET_PUBLIC_KEY = "/api/v1/account/getPublicKey";
 
 	private static final String URL_GET_ADDRESS_BALANCE = "/api/v1/account/balance";
-	private static final String URL_GET_ADDRESSES_BALANCES = "/api/v1/account/balances";
 
 	@PostConstruct
 	public void init() {
@@ -62,7 +58,8 @@ public class ZdpClientImpl implements ZdpClient {
 
 	@Override
 	public TransferDetails getTransaction(String uuid) throws Exception {
-		return null;
+		URI uri = new URI(hostUrl + URL_GET_TX_DETAILS + "/" + uuid);
+		return this.restTemplate.getForObject(uri, TransferDetails.class);
 	}
 
 	public String getHostUrl() {
@@ -92,30 +89,13 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public BalanceResponse getAddressBalance(final byte[] publicKeyBytes, final byte[] privateKeyBytes) throws Exception {
+	public BalanceResponse getAccountBalance(final byte[] publicKeyBytes, final byte[] privateKeyBytes) throws Exception {
 
 		final BalanceRequest req = createRequest(publicKeyBytes, privateKeyBytes);
 
 		final URI uri = new URI(hostUrl + URL_GET_ADDRESS_BALANCE);
 
 		return restTemplate.postForObject(uri, req, BalanceResponse.class);
-	}
-
-	@Override
-	public BalancesResponse getAddressesBalances(final List<Pair<byte[], byte[]>> keyPairs) throws Exception {
-
-		List<BalanceRequest> requests = new ArrayList<>();
-
-		for (Pair<byte[], byte[]> pair : keyPairs) {
-			requests.add(createRequest(pair.getLeft(), pair.getRight()));
-		}
-
-		final URI uri = new URI(hostUrl + URL_GET_ADDRESSES_BALANCES);
-
-		BalancesResponse response = restTemplate.postForObject(uri, requests, BalancesResponse.class);
-
-		return response;
-
 	}
 
 	private BalanceRequest createRequest(final byte[] publicKeyBytes, final byte[] privateKeyBytes) throws InvalidKeySpecException, NoSuchAlgorithmException, Exception {
