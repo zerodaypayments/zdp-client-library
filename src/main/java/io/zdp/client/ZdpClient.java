@@ -1,12 +1,9 @@
 package io.zdp.client;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-import org.apache.commons.lang3.tuple.Pair;
-
+import io.zdp.api.model.AddressResponse;
 import io.zdp.api.model.BalanceResponse;
-import io.zdp.api.model.BalancesResponse;
 import io.zdp.api.model.Key;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferResponse;
@@ -42,5 +39,10 @@ public interface ZdpClient {
 	 * Get public key for address generation
 	 */
 	Key getPublicKey() throws Exception;
+
+	/**
+	 * Get address
+	 */
+	AddressResponse getAddress(byte[] publicKey) throws Exception;
 
 }

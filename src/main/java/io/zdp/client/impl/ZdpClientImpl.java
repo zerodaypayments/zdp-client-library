@@ -2,6 +2,7 @@ package io.zdp.client.impl;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import io.zdp.api.model.AddressResponse;
 import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.Key;
@@ -45,7 +47,9 @@ public class ZdpClientImpl implements ZdpClient {
 
 	private static final String URL_GET_PUBLIC_KEY = "/api/v1/account/getPublicKey";
 
-	private static final String URL_GET_ADDRESS_BALANCE = "/api/v1/account/balance";
+	private static final String URL_GET_BALANCE = "/api/v1/account/balance";
+
+	private static final String URL_GET_ADDRESS = "/api/v1/account/address/";
 
 	@PostConstruct
 	public void init() {
@@ -93,7 +97,7 @@ public class ZdpClientImpl implements ZdpClient {
 
 		final BalanceRequest req = createRequest(publicKeyBytes, privateKeyBytes);
 
-		final URI uri = new URI(hostUrl + URL_GET_ADDRESS_BALANCE);
+		final URI uri = new URI(hostUrl + URL_GET_BALANCE);
 
 		return restTemplate.postForObject(uri, req, BalanceResponse.class);
 	}
@@ -148,6 +152,13 @@ public class ZdpClientImpl implements ZdpClient {
 
 		return restTemplate.postForObject(uri, req, TransferResponse.class);
 
+	}
+
+	@Override
+	public AddressResponse getAddress(byte[] publicKey) throws Exception {
+		final URI uri = new URI(hostUrl + URL_GET_ADDRESS);
+		AddressResponse response = restTemplate.postForObject(uri, null, AddressResponse.class);
+		return response;
 	}
 
 }
