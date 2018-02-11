@@ -6,6 +6,7 @@ import io.zdp.api.model.AddressResponse;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.Key;
 import io.zdp.api.model.TransferDetails;
+import io.zdp.api.model.TransferDetailsList;
 import io.zdp.api.model.TransferResponse;
 
 public interface ZdpClient {
@@ -44,5 +45,10 @@ public interface ZdpClient {
 	 * Get address
 	 */
 	AddressResponse getAddress(byte[] publicKey) throws Exception;
+
+	/**
+	 * Get transactions by "TO" address
+	 */
+	TransferDetailsList getByToAddress(String toAddress) throws Exception;
 
 }

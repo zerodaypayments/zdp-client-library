@@ -2,7 +2,6 @@ package io.zdp.client.impl;
 
 import java.math.BigDecimal;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
@@ -22,6 +21,7 @@ import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.Key;
 import io.zdp.api.model.TransferDetails;
+import io.zdp.api.model.TransferDetailsList;
 import io.zdp.api.model.TransferRequest;
 import io.zdp.api.model.TransferResponse;
 import io.zdp.client.ZdpClient;
@@ -50,6 +50,8 @@ public class ZdpClientImpl implements ZdpClient {
 	private static final String URL_GET_BALANCE = "/api/v1/account/balance";
 
 	private static final String URL_GET_ADDRESS = "/api/v1/account/address/";
+
+	private static final String URL_GET_TXS_BY_TO_ADDRESS = "/api/v1/tx/to";
 
 	@PostConstruct
 	public void init() {
@@ -159,6 +161,12 @@ public class ZdpClientImpl implements ZdpClient {
 		final URI uri = new URI(hostUrl + URL_GET_ADDRESS);
 		AddressResponse response = restTemplate.postForObject(uri, null, AddressResponse.class);
 		return response;
+	}
+
+	@Override
+	public TransferDetailsList getByToAddress(String toAddress) throws Exception {
+		URI uri = new URI(hostUrl + URL_GET_TXS_BY_TO_ADDRESS);
+		return this.restTemplate.getForObject(uri, TransferDetailsList.class);
 	}
 
 }
