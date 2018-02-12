@@ -41,7 +41,7 @@ public class TestZdpTransfers extends TestCase {
 		// 1 -> 2 50 coins
 		BigDecimal amount = BigDecimal.valueOf(40.12345678);
 		
-		TransferResponse resp = zdp.transfer(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded(), from, to, amount, "memo goes here");
+		TransferResponse resp = zdp.transfer(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded(), from, to, amount, "memo goes here memo goes here memo goes here memo goes here vsdv1");
 		
 		assertNotNull(resp.getDate() );
 

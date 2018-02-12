@@ -51,7 +51,9 @@ public class ZdpClientImpl implements ZdpClient {
 
 	private static final String URL_GET_ADDRESS = "/api/v1/account/address/";
 
-	private static final String URL_GET_TXS_BY_TO_ADDRESS = "/api/v1/tx/to";
+	private static final String URL_GET_TXS_BY_TO_ADDRESS_HASH = "/api/v1/tx/to/";
+
+	private static final String URL_GET_TXS_BY_FROM_ADDRESS_HASH = "/api/v1/tx/from/";
 
 	@PostConstruct
 	public void init() {
@@ -164,9 +166,16 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public TransferDetailsList getByToAddress(String toAddress) throws Exception {
-		URI uri = new URI(hostUrl + URL_GET_TXS_BY_TO_ADDRESS);
+	public TransferDetailsList getTransactionByToAddress(String addrHash) throws Exception {
+		URI uri = new URI(hostUrl + URL_GET_TXS_BY_TO_ADDRESS_HASH + addrHash);
 		return this.restTemplate.getForObject(uri, TransferDetailsList.class);
+	}
+
+	@Override
+	public TransferDetailsList getTransactionByFromAddress(String addrHash) throws Exception {
+		URI uri = new URI(hostUrl + URL_GET_TXS_BY_FROM_ADDRESS_HASH + addrHash);
+		return this.restTemplate.getForObject(uri, TransferDetailsList.class);
+
 	}
 
 }

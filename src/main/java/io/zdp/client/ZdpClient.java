@@ -37,6 +37,16 @@ public interface ZdpClient {
 	TransferDetails getTransaction(String uuid) throws Exception;
 
 	/**
+	 * Get transaction details by FROM address hash
+	 */
+	TransferDetailsList getTransactionByFromAddress(String addrHash) throws Exception;
+
+	/**
+	 * Get transaction details by TO address hash
+	 */
+	TransferDetailsList getTransactionByToAddress(String addrHash) throws Exception;
+
+	/**
 	 * Get public key for address generation
 	 */
 	Key getPublicKey() throws Exception;
@@ -45,10 +55,5 @@ public interface ZdpClient {
 	 * Get address
 	 */
 	AddressResponse getAddress(byte[] publicKey) throws Exception;
-
-	/**
-	 * Get transactions by "TO" address
-	 */
-	TransferDetailsList getByToAddress(String toAddress) throws Exception;
 
 }
