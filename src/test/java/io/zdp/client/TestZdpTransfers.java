@@ -9,6 +9,7 @@ import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.TransferResponse;
 import io.zdp.client.impl.ZdpClientImpl;
 import io.zdp.common.crypto.CryptoUtils;
+import io.zdp.common.crypto.Signer;
 import junit.framework.TestCase;
 
 public class TestZdpTransfers extends TestCase {
@@ -28,22 +29,22 @@ public class TestZdpTransfers extends TestCase {
 		KeyPair keys1 = CryptoUtils.generateKeys(seed1);
 		BalanceResponse resp1 = zdp.getAccountBalance(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded());
 		System.out.println(resp1.getBalance());
-		
-		String from = CryptoUtils.getUniqueAddressForAccountUuid(resp1.getAddress());
+
+		String from = Signer.getPublicKeyHash(keys1.getPublic().getEncoded());
 
 		String seed2 = "2222222222222222222222222222222222222222222222222222222222222222";
 		KeyPair keys2 = CryptoUtils.generateKeys(seed2);
 		BalanceResponse resp2 = zdp.getAccountBalance(keys2.getPublic().getEncoded(), keys2.getPrivate().getEncoded());
 		System.out.println(resp2.getBalance());
-		
-		String to = CryptoUtils.getUniqueAddressForAccountUuid(resp2.getAddress());
+
+		String to = CryptoUtils.getUniqueAddressForAccountUuid(Signer.getPublicKeyHash(keys2.getPublic().getEncoded()));
 
 		// 1 -> 2 50 coins
 		BigDecimal amount = BigDecimal.valueOf(40.12345678);
-		
-		TransferResponse resp = zdp.transfer(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded(), from, to, amount, "memo goes here memo goes here memo goes here memo goes here vsdv1");
-		
-		assertNotNull(resp.getDate() );
+
+		TransferResponse resp = zdp.transfer(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded(), from, to, amount, "REF123");
+
+		assertNotNull(resp.getDate());
 
 		System.out.println(resp);
 
