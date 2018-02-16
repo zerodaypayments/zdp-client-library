@@ -47,6 +47,11 @@ public interface ZdpClient {
 	TransferDetailsList getTransactionByToAddress(String addrHash) throws Exception;
 
 	/**
+	 * Get transaction details by account 
+	 */
+	TransferDetailsList getTransactions(byte[] publicKey, byte[] privateKey) throws Exception;
+
+	/**
 	 * Get public key for address generation
 	 */
 	Key getPublicKey() throws Exception;

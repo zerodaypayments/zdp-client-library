@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import io.zdp.api.model.AccountRequest;
 import io.zdp.api.model.AddressResponse;
 import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
@@ -48,6 +49,8 @@ public class ZdpClientImpl implements ZdpClient {
 	private static final String URL_GET_PUBLIC_KEY = "/api/v1/account/getPublicKey";
 
 	private static final String URL_GET_BALANCE = "/api/v1/account/balance";
+
+	private static final String URL_GET_ACCOUNT_TRANSACTIONS = "/api/v1/account/transactions";
 
 	private static final String URL_GET_ADDRESS = "/api/v1/account/address/";
 
@@ -99,14 +102,15 @@ public class ZdpClientImpl implements ZdpClient {
 	@Override
 	public BalanceResponse getAccountBalance(final byte[] publicKeyBytes, final byte[] privateKeyBytes) throws Exception {
 
-		final BalanceRequest req = createRequest(publicKeyBytes, privateKeyBytes);
+		final AccountRequest req = createRequest(publicKeyBytes, privateKeyBytes);
 
 		final URI uri = new URI(hostUrl + URL_GET_BALANCE);
 
 		return restTemplate.postForObject(uri, req, BalanceResponse.class);
 	}
 
-	private BalanceRequest createRequest(final byte[] publicKeyBytes, final byte[] privateKeyBytes) throws InvalidKeySpecException, NoSuchAlgorithmException, Exception {
+	private AccountRequest createRequest(final byte[] publicKeyBytes, final byte[] privateKeyBytes) throws InvalidKeySpecException, NoSuchAlgorithmException, Exception {
+
 		// Generate address from public key
 		final String address = Signer.getPublicKeyHash(publicKeyBytes);
 
@@ -119,6 +123,7 @@ public class ZdpClientImpl implements ZdpClient {
 		req.setSignedAddress(signature);
 
 		log.debug("Get balance: " + address);
+
 		return req;
 	}
 
@@ -175,6 +180,17 @@ public class ZdpClientImpl implements ZdpClient {
 	public TransferDetailsList getTransactionByFromAddress(String addrHash) throws Exception {
 		URI uri = new URI(hostUrl + URL_GET_TXS_BY_FROM_ADDRESS_HASH + addrHash);
 		return this.restTemplate.getForObject(uri, TransferDetailsList.class);
+
+	}
+
+	@Override
+	public TransferDetailsList getTransactions(byte[] publicKey, byte[] privateKey) throws Exception {
+
+		final AccountRequest req = createRequest(publicKey, privateKey);
+
+		final URI uri = new URI(hostUrl + URL_GET_ACCOUNT_TRANSACTIONS);
+
+		return restTemplate.postForObject(uri, req, TransferDetailsList.class);
 
 	}
 
