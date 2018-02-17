@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import io.zdp.api.model.AddressResponse;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.Key;
+import io.zdp.api.model.TransactionHeadersResponse;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferDetailsList;
 import io.zdp.api.model.TransferResponse;
@@ -49,7 +50,7 @@ public interface ZdpClient {
 	/**
 	 * Get transaction details by account 
 	 */
-	TransferDetailsList getTransactions(byte[] publicKey, byte[] privateKey) throws Exception;
+	TransactionHeadersResponse getTransactionHeaders(byte[] publicKey, byte[] privateKey) throws Exception;
 
 	/**
 	 * Get public key for address generation

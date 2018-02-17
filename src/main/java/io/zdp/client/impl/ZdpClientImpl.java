@@ -21,6 +21,7 @@ import io.zdp.api.model.AddressResponse;
 import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.Key;
+import io.zdp.api.model.TransactionHeadersResponse;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferDetailsList;
 import io.zdp.api.model.TransferRequest;
@@ -184,13 +185,13 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public TransferDetailsList getTransactions(byte[] publicKey, byte[] privateKey) throws Exception {
+	public TransactionHeadersResponse getTransactionHeaders(byte[] publicKey, byte[] privateKey) throws Exception {
 
 		final AccountRequest req = createRequest(publicKey, privateKey);
 
 		final URI uri = new URI(hostUrl + URL_GET_ACCOUNT_TRANSACTIONS);
 
-		return restTemplate.postForObject(uri, req, TransferDetailsList.class);
+		return restTemplate.postForObject(uri, req, TransactionHeadersResponse.class);
 
 	}
 

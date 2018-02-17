@@ -6,7 +6,9 @@ import java.security.KeyPair;
 import org.junit.Test;
 
 import io.zdp.api.model.BalanceResponse;
+import io.zdp.api.model.TransactionHeadersResponse;
 import io.zdp.api.model.TransferDetails;
+import io.zdp.api.model.TransferDetailsList;
 import io.zdp.api.model.TransferResponse;
 import io.zdp.client.impl.ZdpClientImpl;
 import io.zdp.common.crypto.CryptoUtils;
@@ -46,12 +48,19 @@ public class TestZdpTransfers extends TestCase {
 		TransferResponse resp = zdp.transfer(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded(), from, to, amount, "REF123");
 		assertNotNull(resp.getDate());
 		System.out.println(resp);
-		
+
 		// tx by uuid
 		{
 			TransferDetails tx = zdp.getTransaction(resp.getUuid());
 			assertNotNull(tx);
 			assertEquals(tx.getUuid().toLowerCase(), resp.getUuid().toLowerCase());
+		}
+
+		// tx by account
+		{
+			TransactionHeadersResponse transactions = zdp.getTransactionHeaders(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded());
+			assertNotNull(transactions);
+			System.out.println("transactions: " + transactions.getTransactions().size());
 		}
 
 	}
