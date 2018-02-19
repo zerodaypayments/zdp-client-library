@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import io.zdp.api.model.AddressResponse;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.Key;
+import io.zdp.api.model.Seed;
 import io.zdp.api.model.TransactionHeadersResponse;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferDetailsList;
@@ -12,6 +13,11 @@ import io.zdp.api.model.TransferResponse;
 
 public interface ZdpClient {
 
+	/**
+	 * Generate seed (for new accounts)
+	 */
+	Seed generateSeed() throws Exception;
+	
 	/**
 	 * Ping API
 	 */
@@ -61,5 +67,5 @@ public interface ZdpClient {
 	 * Get address
 	 */
 	AddressResponse getAddress(byte[] publicKey) throws Exception;
-
+	
 }

@@ -21,12 +21,14 @@ import io.zdp.api.model.AddressResponse;
 import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
 import io.zdp.api.model.Key;
+import io.zdp.api.model.Seed;
 import io.zdp.api.model.TransactionHeadersResponse;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferDetailsList;
 import io.zdp.api.model.TransferRequest;
 import io.zdp.api.model.TransferResponse;
 import io.zdp.client.ZdpClient;
+import io.zdp.common.crypto.CryptoUtils;
 import io.zdp.common.crypto.Signer;
 
 @Component
@@ -51,6 +53,8 @@ public class ZdpClientImpl implements ZdpClient {
 
 	private static final String URL_GET_BALANCE = "/api/v1/account/balance";
 
+	private static final String URL_GET_SEED = "/api/v1/account/seed";
+
 	private static final String URL_GET_ACCOUNT_TRANSACTIONS = "/api/v1/account/transactions";
 
 	private static final String URL_GET_ADDRESS = "/api/v1/account/address/";
@@ -66,6 +70,12 @@ public class ZdpClientImpl implements ZdpClient {
 
 		restTemplate = new RestTemplate();
 
+	}
+
+	@Override
+	public Seed generateSeed() throws Exception {
+		URI uri = new URI(hostUrl + URL_GET_SEED);
+		return this.restTemplate.getForObject(uri, Seed.class);
 	}
 
 	@Override
