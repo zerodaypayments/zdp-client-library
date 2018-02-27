@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 
 import io.zdp.api.model.AddressResponse;
 import io.zdp.api.model.BalanceResponse;
+import io.zdp.api.model.FeeResponse;
 import io.zdp.api.model.Key;
-import io.zdp.api.model.Seed;
+import io.zdp.api.model.PingResponse;
+import io.zdp.api.model.SecretKey;
 import io.zdp.api.model.TransactionHeadersResponse;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferDetailsList;
@@ -16,17 +18,17 @@ public interface ZdpClient {
 	/**
 	 * Generate seed (for new accounts)
 	 */
-	Seed generateSeed() throws Exception;
+	SecretKey generateSeed() throws Exception;
 	
 	/**
 	 * Ping API
 	 */
-	long ping() throws Exception;
+	PingResponse ping() throws Exception;
 
 	/**
 	 * Get Transaction fee from server
 	 */
-	BigDecimal getFee() throws Exception;
+	FeeResponse getFee() throws Exception;
 
 	/**
 	 * Submit transfer request

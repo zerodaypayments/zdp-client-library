@@ -20,8 +20,10 @@ import io.zdp.api.model.AccountRequest;
 import io.zdp.api.model.AddressResponse;
 import io.zdp.api.model.BalanceRequest;
 import io.zdp.api.model.BalanceResponse;
+import io.zdp.api.model.FeeResponse;
 import io.zdp.api.model.Key;
-import io.zdp.api.model.Seed;
+import io.zdp.api.model.PingResponse;
+import io.zdp.api.model.SecretKey;
 import io.zdp.api.model.TransactionHeadersResponse;
 import io.zdp.api.model.TransferDetails;
 import io.zdp.api.model.TransferDetailsList;
@@ -73,9 +75,9 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public Seed generateSeed() throws Exception {
+	public SecretKey generateSeed() throws Exception {
 		URI uri = new URI(hostUrl + URL_GET_SEED);
-		return this.restTemplate.getForObject(uri, Seed.class);
+		return this.restTemplate.getForObject(uri, SecretKey.class);
 	}
 
 	@Override
@@ -93,20 +95,20 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public long ping() throws Exception {
+	public PingResponse ping() throws Exception {
 
 		URI uri = new URI(hostUrl + URL_PING);
-		return this.restTemplate.getForObject(uri, Long.class);
+		return this.restTemplate.getForObject(uri, PingResponse.class);
 	}
 
 	@Override
-	public BigDecimal getFee() throws Exception {
+	public FeeResponse getFee() throws Exception {
 
 		final URI uri = new URI(hostUrl + URL_GET_TX_FEE);
 
 		log.debug("Get fee: " + uri);
 
-		return restTemplate.getForObject(uri, BigDecimal.class);
+		return restTemplate.getForObject(uri, FeeResponse.class);
 
 	}
 
