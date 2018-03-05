@@ -2,72 +2,67 @@ package io.zdp.client;
 
 import java.math.BigDecimal;
 
-import io.zdp.api.model.AddressResponse;
-import io.zdp.api.model.BalanceResponse;
-import io.zdp.api.model.FeeResponse;
-import io.zdp.api.model.Key;
-import io.zdp.api.model.PingResponse;
-import io.zdp.api.model.SecretKey;
-import io.zdp.api.model.TransactionHeadersResponse;
-import io.zdp.api.model.TransferDetails;
-import io.zdp.api.model.TransferDetailsList;
-import io.zdp.api.model.TransferResponse;
+import io.zdp.api.model.v1.CountTransactionsResponse;
+import io.zdp.api.model.v1.GetAddressResponse;
+import io.zdp.api.model.v1.GetBalanceResponse;
+import io.zdp.api.model.v1.GetFeeResponse;
+import io.zdp.api.model.v1.GetNewAccountResponse;
+import io.zdp.api.model.v1.GetPublicKeyResponse;
+import io.zdp.api.model.v1.GetTransactionDetailsResponse;
+import io.zdp.api.model.v1.ListTransactionsResponse;
+import io.zdp.api.model.v1.PingResponse;
+import io.zdp.api.model.v1.SubmitTransactionResponse;
 
 public interface ZdpClient {
 
 	/**
-	 * Generate seed (for new accounts)
-	 */
-	SecretKey generateSeed() throws Exception;
-	
-	/**
-	 * Ping API
+	 * Ping network
 	 */
 	PingResponse ping() throws Exception;
 
 	/**
-	 * Get Transaction fee from server
+	 * Get current transaction fee from network
 	 */
-	FeeResponse getFee() throws Exception;
+	GetFeeResponse getFee() throws Exception;
 
 	/**
-	 * Submit transfer request
+	 * Get new account private/public keys. The account doesn't exist on the network but its information can be used to send transfers to.
 	 */
-	TransferResponse transfer(byte[] publicKey, byte[] privateKey, String from, String to, BigDecimal amount, String memo) throws Exception;
+	GetNewAccountResponse getNewAccount() throws Exception;
+
+	/**
+	 * Get public key for a private key
+	 */
+	GetPublicKeyResponse getPublicKey(String privateKeyB58) throws Exception;
+
+	/**
+	 * Get unique address for an account
+	 */
+	GetAddressResponse getAddress(String privateKeyB58, String publicKeyB58) throws Exception;
 
 	/**
 	 * Get account balance
 	 */
-	BalanceResponse getAccountBalance(byte[] publicKey, byte[] privateKey) throws Exception;
+	GetBalanceResponse getBalance(String privateKeyB58, String publicKeyB58) throws Exception;
+
+	/**
+	 * Submit transfer request (synchronous)
+	 */
+	SubmitTransactionResponse transfer(String privateKeyB58, String publicKeyB58, String from, String to, BigDecimal amount, String memo) throws Exception;
 
 	/**
 	 * Get transaction details by tx uuid
 	 */
-	TransferDetails getTransaction(String uuid) throws Exception;
+	GetTransactionDetailsResponse getTransactionDetails(String uuid) throws Exception;
 
 	/**
-	 * Get transaction details by FROM address hash
+	 * Get transaction headers
 	 */
-	TransferDetailsList getTransactionByFromAddress(String addrHash) throws Exception;
+	ListTransactionsResponse getTransactions(String publicKeyB58, String fromAddress, String toAddress, String memo, int page, int pageSize) throws Exception;
 
 	/**
-	 * Get transaction details by TO address hash
+	 * Count transaction headers
 	 */
-	TransferDetailsList getTransactionByToAddress(String addrHash) throws Exception;
+	CountTransactionsResponse getTransactionsCount(String publicKeyB58, String fromAddress, String toAddress, String memo) throws Exception;
 
-	/**
-	 * Get transaction details by account 
-	 */
-	TransactionHeadersResponse getTransactionHeaders(byte[] publicKey, byte[] privateKey) throws Exception;
-
-	/**
-	 * Get public key for address generation
-	 */
-	Key getPublicKey() throws Exception;
-
-	/**
-	 * Get address
-	 */
-	AddressResponse getAddress(byte[] publicKey) throws Exception;
-	
 }

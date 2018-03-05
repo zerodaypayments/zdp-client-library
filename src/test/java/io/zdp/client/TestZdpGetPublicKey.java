@@ -14,7 +14,6 @@ public class TestZdpGetPublicKey extends TestCase {
 		zdp.init();
 		zdp.setHostUrl("http://localhost");
 
-		System.out.println(zdp.getPublicKey());
 
 	}
 
