@@ -2,26 +2,27 @@ package io.zdp.client;
 
 import org.junit.Test;
 
+import io.zdp.client.impl.ZdpClientImpl;
 import junit.framework.TestCase;
 
 public class TestZdpTransfers extends TestCase {
 
 	@Test
 	public void test() throws Exception {
-/*
+
+		/*
 		ZdpClientImpl zdp = new ZdpClientImpl();
 		zdp.init();
 		zdp.setHostUrl("http://localhost");
 
 		System.out.println(zdp.ping());
-
 		System.out.println(zdp.getFee());
 
-		String seed1 = "1111111111111111111111111111111111111111111111111111111111111111";
-		KeyPair keys1 = CryptoUtils.generateKeys(seed1);
-		BalanceResponse resp1 = zdp.getAccountBalance(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded());
+		String privKey1 = "5NMXiwArVTnTHbBPcrsHj7bzXig8Sf2np7Tg4j9ThGBv";
+		String pubKey1 = "xcStKZ3QgfiMuHSQBS4pjFRHDBArqpdiqPNni6diGWCn";
+		
+		zdp.getAccountBalance(keys1.getPublic().getEncoded(), keys1.getPrivate().getEncoded());
 		System.out.println(resp1.getBalance());
-
 		String from = CryptoUtils.getUniqueAddressForAccountUuid(Signer.getPublicKeyHash(keys1.getPublic().getEncoded()));
 
 		String seed2 = "2222222222222222222222222222222222222222222222222222222222222222";
