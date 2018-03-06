@@ -58,11 +58,11 @@ public interface ZdpClient {
 	/**
 	 * Get transaction headers
 	 */
-	ListTransactionsResponse getTransactions(String publicKeyB58, String fromAddress, String toAddress, String memo, int page, int pageSize) throws Exception;
+	ListTransactionsResponse getTransactions(String privateKeyB58, String publicKeyB58, String fromAddress, String toAddress, String memo, int page, int pageSize) throws Exception;
 
 	/**
 	 * Count transaction headers
 	 */
-	CountTransactionsResponse getTransactionsCount(String publicKeyB58, String fromAddress, String toAddress, String memo) throws Exception;
+	CountTransactionsResponse getTransactionsCount(String privateKeyB58, String publicKeyB58, String fromAddress, String toAddress, String memo) throws Exception;
 
 }
