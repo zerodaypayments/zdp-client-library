@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.bitcoinj.core.Base58;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +123,7 @@ public class ZdpClientImpl implements ZdpClient {
 		req.setPublicKey(publicKeyB58);
 		req.setSignature(CryptoUtils.sign(Base58.decode(privateKeyB58), publicKeyB58));
 
-		final GetBalanceResponse response = restTemplate.postForObject(uri, null, GetBalanceResponse.class);
+		final GetBalanceResponse response = restTemplate.postForObject(uri, req, GetBalanceResponse.class);
 
 		return response;
 
@@ -143,7 +144,9 @@ public class ZdpClientImpl implements ZdpClient {
 		req.setPublicKey(publicKeyB58);
 		req.setRequestUuid(UUID.randomUUID().toString());
 		req.setToAddress(to);
-		req.setSignature(CryptoUtils.sign(Base58.decode(privateKeyB58), publicKeyB58));
+
+		String signature = DigestUtils.sha256Hex(from + amount.toPlainString() + to);
+		req.setSignature(CryptoUtils.sign(Base58.decode(privateKeyB58), signature));
 
 		return restTemplate.postForObject(uri, req, SubmitTransactionResponse.class);
 	}
@@ -159,17 +162,13 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public ListTransactionsResponse getTransactions(String privateKeyB58, String publicKeyB58, String fromAddress, String toAddress, String memo, int page, int pageSize) throws Exception {
+	public ListTransactionsResponse getTransactions(String privateKeyB58, String publicKeyB58, int page, int pageSize) throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_GET_ACCOUNT_TRANSACTIONS);
 
 		log.debug("getTransactions: " + uri);
 
 		ListTransactionsRequest req = new ListTransactionsRequest();
-
-		req.setFrom(fromAddress);
-		req.setTo(toAddress);
-		req.setMemo(memo);
 
 		req.setPage(page);
 		req.setPageSize(pageSize);
@@ -185,17 +184,13 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public CountTransactionsResponse getTransactionsCount(String privateKeyB58, String publicKeyB58, String fromAddress, String toAddress, String memo) throws Exception {
+	public CountTransactionsResponse getTransactionsCount(String privateKeyB58, String publicKeyB58) throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_COUNT_ACCOUNT_TRANSACTIONS);
 
 		log.debug("Count: " + uri);
 
 		ListTransactionsRequest req = new ListTransactionsRequest();
-
-		req.setFrom(fromAddress);
-		req.setTo(toAddress);
-		req.setMemo(memo);
 
 		if (publicKeyB58 != null) {
 			req.setPublicKey(publicKeyB58);
