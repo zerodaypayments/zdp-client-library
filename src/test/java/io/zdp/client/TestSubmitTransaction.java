@@ -2,6 +2,7 @@ package io.zdp.client;
 
 import java.math.BigDecimal;
 
+import org.bitcoinj.core.Base58;
 import org.junit.Test;
 
 import io.zdp.api.model.v1.CountTransactionsResponse;
@@ -22,7 +23,9 @@ public class TestSubmitTransaction extends BaseModelTest {
 		zdp.setHostUrl("http://localhost");
 
 		String privKey1 = "5NMXiwArVTnTHbBPcrsHj7bzXig8Sf2np7Tg4j9ThGBv";
-		String pubKey1 = "xcStKZ3QgfiMuHSQBS4pjFRHDBArqpdiqPNni6diGWCn";
+		String pubKey1 = Base58.encode(CryptoUtils.getPublicKeyFromPrivate(new java.math.BigInteger(org.bitcoinj.core.Base58.decode(privKey1)), true));
+
+		CryptoUtils.getPublicKeyFromPrivate(new java.math.BigInteger(org.bitcoinj.core.Base58.decode(privKey1)), true);
 
 		GetBalanceResponse balance1 = zdp.getBalance(privKey1, pubKey1);
 
@@ -35,7 +38,7 @@ public class TestSubmitTransaction extends BaseModelTest {
 		out(from);
 
 		String privKey2 = "5aQSWPxmHkT4p9RabtsFmGgPsEjCmTyph1Hmh6FLeaGn";
-		String pubKey2 = "zjr8hMqg5LMiLoV9g2aRQKF61QM1xCnkHeMDsZLF8dV9";
+		String pubKey2 = Base58.encode(CryptoUtils.getPublicKeyFromPrivate(new java.math.BigInteger(org.bitcoinj.core.Base58.decode(privKey2)), true));
 
 		GetBalanceResponse balance2 = zdp.getBalance(privKey2, pubKey2);
 
@@ -75,7 +78,7 @@ public class TestSubmitTransaction extends BaseModelTest {
 			assertNotNull(tx);
 			assertEquals(tx.getTxUuid().toLowerCase(), resp.getTxUuid().toLowerCase());
 		}
-		
+
 		// tx by to address
 		{
 			GetTransactionDetailsResponse tx = zdp.getTransactionDetails(to);
@@ -84,7 +87,7 @@ public class TestSubmitTransaction extends BaseModelTest {
 			assertNotNull(tx);
 			assertEquals(tx.getTxUuid().toLowerCase(), resp.getTxUuid().toLowerCase());
 		}
-		
+
 		// count by account
 		{
 			CountTransactionsResponse countResponse = zdp.getTransactionsCount(privKey1, pubKey1);
@@ -93,14 +96,12 @@ public class TestSubmitTransaction extends BaseModelTest {
 
 			assertEquals(1, count);
 		}
-		
+
 		// list by account
 		{
 			ListTransactionsResponse listResp = zdp.getTransactions(privKey1, pubKey1, 0, 10);
 			out(listResp);
 		}
-		
-		
 
 	}
 

@@ -14,9 +14,9 @@ public class TestZdpGetPublicKey extends BaseModelTest {
 		zdp.setHostUrl("http://localhost");
 		zdp.init();
 
-		GetPublicKeyResponse resp = zdp.getPublicKey("4uGzWU6fVXYmAMKj3eHLDK1aEmkeRMK2DzxVmSRMgogK");
+		GetPublicKeyResponse resp = zdp.getPublicKey("4Cy24BAn9KwkMZzaYgJjvQFzc1yxGvVSGm6a2X53FqxC");
 
-		assertEquals("ibiuVPmcJgKeFYzqx7uxv4LGzH2faCKJrLtN3ok58k7q", resp.getPublicKey());
+		assertEquals("25wxARFSXq5sFwUbcRJ4TLpGV4mGsiADrzrmwnJq6xPT6", resp.getPublicKey());
 
 		out(resp);
 
