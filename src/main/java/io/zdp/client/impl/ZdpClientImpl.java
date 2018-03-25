@@ -64,6 +64,8 @@ public class ZdpClientImpl implements ZdpClient {
 	public PingResponse ping() throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_PING);
+		
+		log.debug("ping: " + uri);
 
 		return this.restTemplate.getForObject(uri, PingResponse.class);
 
@@ -118,6 +120,8 @@ public class ZdpClientImpl implements ZdpClient {
 	public GetBalanceResponse getBalance(String privateKeyB58, String publicKeyB58) throws Exception {
 
 		final URI uri = new URI(hostUrl + Urls.URL_GET_BALANCE);
+
+		log.debug("getBalance: " + uri);
 
 		final GetBalanceRequest req = new GetBalanceRequest();
 		req.setPublicKey(publicKeyB58);
