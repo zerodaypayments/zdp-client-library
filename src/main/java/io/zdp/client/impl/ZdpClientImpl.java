@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import io.zdp.api.model.v1.CountTransactionsResponse;
+import io.zdp.api.model.v1.CountResponse;
 import io.zdp.api.model.v1.GetAddressRequest;
 import io.zdp.api.model.v1.GetAddressResponse;
 import io.zdp.api.model.v1.GetBalanceRequest;
@@ -30,6 +30,9 @@ import io.zdp.api.model.v1.PingResponse;
 import io.zdp.api.model.v1.SubmitTransactionRequest;
 import io.zdp.api.model.v1.SubmitTransactionResponse;
 import io.zdp.api.model.v1.Urls;
+import io.zdp.api.model.v1.ledger.ListAccountsRequest;
+import io.zdp.api.model.v1.ledger.ListAccountsResponse;
+import io.zdp.api.model.v1.ledger.ListAllTransactionsRequest;
 import io.zdp.client.ZdpClient;
 import io.zdp.common.crypto.CryptoUtils;
 
@@ -64,7 +67,7 @@ public class ZdpClientImpl implements ZdpClient {
 	public PingResponse ping() throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_PING);
-		
+
 		log.debug("ping: " + uri);
 
 		return this.restTemplate.getForObject(uri, PingResponse.class);
@@ -134,7 +137,8 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public SubmitTransactionResponse transfer(String privateKeyB58, String publicKeyB58, String from, String to, BigDecimal amount, String memo) throws Exception {
+	public SubmitTransactionResponse transfer(String privateKeyB58, String publicKeyB58, String from, String to,
+			BigDecimal amount, String memo) throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_TRANSFER);
 
@@ -160,13 +164,15 @@ public class ZdpClientImpl implements ZdpClient {
 
 		final URI uri = new URI(hostUrl + Urls.URL_GET_TX_DETAILS + uuid);
 
-		final GetTransactionDetailsResponse response = restTemplate.getForObject(uri, GetTransactionDetailsResponse.class);
+		final GetTransactionDetailsResponse response = restTemplate.getForObject(uri,
+				GetTransactionDetailsResponse.class);
 
 		return response;
 	}
 
 	@Override
-	public ListTransactionsResponse getTransactions(String privateKeyB58, String publicKeyB58, int page, int pageSize) throws Exception {
+	public ListTransactionsResponse getTransactions(String privateKeyB58, String publicKeyB58, int page, int pageSize)
+			throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_GET_ACCOUNT_TRANSACTIONS);
 
@@ -188,7 +194,7 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public CountTransactionsResponse getTransactionsCount(String privateKeyB58, String publicKeyB58) throws Exception {
+	public CountResponse getTransactionsCount(String privateKeyB58, String publicKeyB58) throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_COUNT_ACCOUNT_TRANSACTIONS);
 
@@ -202,7 +208,51 @@ public class ZdpClientImpl implements ZdpClient {
 
 		}
 
-		return restTemplate.postForObject(uri, req, CountTransactionsResponse.class);
+		return restTemplate.postForObject(uri, req, CountResponse.class);
+	}
+
+	@Override
+	public long countAccounts() throws Exception {
+
+		URI uri = new URI(hostUrl + Urls.URL_PUBLIC_LEDGER_ACCOUNTS_COUNT);
+
+		log.debug("Count wallets: " + uri);
+
+		return restTemplate.getForObject(uri, CountResponse.class).getCount();
+
+	}
+
+	@Override
+	public ListAccountsResponse listAccounts(ListAccountsRequest req) throws Exception {
+
+		URI uri = new URI(hostUrl + Urls.URL_PUBLIC_LEDGER_ACCOUNTS_LIST);
+
+		log.debug("List wallets: " + uri);
+
+		return restTemplate.postForObject(uri, req, ListAccountsResponse.class);
+
+	}
+
+	@Override
+	public long countTransactions() throws Exception {
+
+		URI uri = new URI(hostUrl + Urls.URL_PUBLIC_LEDGER_TX_COUNT);
+
+		log.debug("Count tx: " + uri);
+
+		return restTemplate.getForObject(uri, CountResponse.class).getCount();
+
+	}
+
+	@Override
+	public ListTransactionsResponse listTransactions(ListAllTransactionsRequest req) throws Exception {
+
+		URI uri = new URI(hostUrl + Urls.URL_PUBLIC_LEDGER_TX_LIST);
+
+		log.debug("List tx: " + uri);
+
+		return restTemplate.postForObject(uri, req, ListTransactionsResponse.class);
+
 	}
 
 }

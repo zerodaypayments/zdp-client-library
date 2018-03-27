@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.bitcoinj.core.Base58;
 import org.junit.Test;
 
-import io.zdp.api.model.v1.CountTransactionsResponse;
+import io.zdp.api.model.v1.CountResponse;
 import io.zdp.api.model.v1.GetBalanceResponse;
 import io.zdp.api.model.v1.GetTransactionDetailsResponse;
 import io.zdp.api.model.v1.ListTransactionsResponse;
@@ -90,7 +90,7 @@ public class TestSubmitTransaction extends BaseModelTest {
 
 		// count by account
 		{
-			CountTransactionsResponse countResponse = zdp.getTransactionsCount(privKey1, pubKey1);
+			CountResponse countResponse = zdp.getTransactionsCount(privKey1, pubKey1);
 			out(countResponse);
 			long count = countResponse.getCount();
 
