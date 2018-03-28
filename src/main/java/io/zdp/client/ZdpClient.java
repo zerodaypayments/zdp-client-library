@@ -82,7 +82,7 @@ public interface ZdpClient {
 	long countTransactions() throws Exception;
 
 	/**
-	 * Public ledger: list wallets
+	 * Public ledger: list accounts (sorted by largest balance desc)
 	 */
 	ListAccountsResponse listAccounts(ListAccountsRequest req) throws Exception;
 
