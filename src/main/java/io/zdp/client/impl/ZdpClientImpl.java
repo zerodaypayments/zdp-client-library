@@ -106,11 +106,14 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public GetAddressResponse getAddress(String privateKeyB58, String publicKeyB58) throws Exception {
+	public GetAddressResponse getAddress(String privateKeyB58) throws Exception {
 
 		final URI uri = new URI(hostUrl + Urls.URL_GET_ADDRESS);
 
 		final GetAddressRequest req = new GetAddressRequest();
+
+		final String publicKeyB58 = CryptoUtils.getPublicKey58FromPrivateKey58(privateKeyB58);
+
 		req.setPublicKey(publicKeyB58);
 		req.setSignature(CryptoUtils.sign(Base58.decode(privateKeyB58), publicKeyB58));
 
@@ -120,9 +123,11 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public GetBalanceResponse getBalance(String privateKeyB58, String publicKeyB58) throws Exception {
+	public GetBalanceResponse getBalance(String privateKeyB58) throws Exception {
 
 		final URI uri = new URI(hostUrl + Urls.URL_GET_BALANCE);
+
+		final String publicKeyB58 = CryptoUtils.getPublicKey58FromPrivateKey58(privateKeyB58);
 
 		log.debug("getBalance: " + uri);
 
@@ -137,10 +142,11 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public SubmitTransactionResponse transfer(String privateKeyB58, String publicKeyB58, String from, String to,
-			BigDecimal amount, String memo) throws Exception {
+	public SubmitTransactionResponse transfer(String privateKeyB58, String from, String to, BigDecimal amount, String memo) throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_TRANSFER);
+
+		final String publicKeyB58 = CryptoUtils.getPublicKey58FromPrivateKey58(privateKeyB58);
 
 		log.debug("transfer: " + uri);
 
@@ -164,17 +170,17 @@ public class ZdpClientImpl implements ZdpClient {
 
 		final URI uri = new URI(hostUrl + Urls.URL_GET_TX_DETAILS + uuid);
 
-		final GetTransactionDetailsResponse response = restTemplate.getForObject(uri,
-				GetTransactionDetailsResponse.class);
+		final GetTransactionDetailsResponse response = restTemplate.getForObject(uri, GetTransactionDetailsResponse.class);
 
 		return response;
 	}
 
 	@Override
-	public ListTransactionsResponse getTransactions(String privateKeyB58, String publicKeyB58, int page, int pageSize)
-			throws Exception {
+	public ListTransactionsResponse getTransactions(String privateKeyB58, int page, int pageSize) throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_GET_ACCOUNT_TRANSACTIONS);
+
+		final String publicKeyB58 = CryptoUtils.getPublicKey58FromPrivateKey58(privateKeyB58);
 
 		log.debug("getTransactions: " + uri);
 
@@ -194,9 +200,11 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public CountResponse getTransactionsCount(String privateKeyB58, String publicKeyB58) throws Exception {
+	public CountResponse getTransactionsCount(String privateKeyB58) throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_COUNT_ACCOUNT_TRANSACTIONS);
+
+		final String publicKeyB58 = CryptoUtils.getPublicKey58FromPrivateKey58(privateKeyB58);
 
 		log.debug("Count: " + uri);
 

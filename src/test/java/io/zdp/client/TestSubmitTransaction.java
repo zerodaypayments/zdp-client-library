@@ -4,35 +4,39 @@ import java.math.BigDecimal;
 
 import org.bitcoinj.core.Base58;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import io.zdp.api.model.v1.CountResponse;
 import io.zdp.api.model.v1.GetBalanceResponse;
 import io.zdp.api.model.v1.GetTransactionDetailsResponse;
 import io.zdp.api.model.v1.ListTransactionsResponse;
 import io.zdp.api.model.v1.SubmitTransactionResponse;
-import io.zdp.client.impl.ZdpClientImpl;
 import io.zdp.common.crypto.CryptoUtils;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({ "classpath:/test-spring-context.xml" })
 public class TestSubmitTransaction extends BaseModelTest {
+
+	@Autowired
+	private ZdpClient zdp;
 
 	@Test
 	public void test() throws Exception {
-
-		ZdpClientImpl zdp = new ZdpClientImpl();
-		zdp.init();
-		zdp.setHostUrl("http://localhost");
 
 		String privKey1 = "5NMXiwArVTnTHbBPcrsHj7bzXig8Sf2np7Tg4j9ThGBv";
 		String pubKey1 = Base58.encode(CryptoUtils.getPublicKeyFromPrivate(new java.math.BigInteger(org.bitcoinj.core.Base58.decode(privKey1)), true));
 
 		CryptoUtils.getPublicKeyFromPrivate(new java.math.BigInteger(org.bitcoinj.core.Base58.decode(privKey1)), true);
 
-		GetBalanceResponse balance1 = zdp.getBalance(privKey1, pubKey1);
+		GetBalanceResponse balance1 = zdp.getBalance(privKey1);
 
 		System.out.println("Balance from:");
 		out(balance1);
 
-		String from = CryptoUtils.generateAccountUniqueAddress(pubKey1);
+		String from = CryptoUtils.generateUniqueAddressByPublicKey58(pubKey1);
 
 		System.out.println("From:");
 		out(from);
@@ -40,17 +44,17 @@ public class TestSubmitTransaction extends BaseModelTest {
 		String privKey2 = "5aQSWPxmHkT4p9RabtsFmGgPsEjCmTyph1Hmh6FLeaGn";
 		String pubKey2 = Base58.encode(CryptoUtils.getPublicKeyFromPrivate(new java.math.BigInteger(org.bitcoinj.core.Base58.decode(privKey2)), true));
 
-		GetBalanceResponse balance2 = zdp.getBalance(privKey2, pubKey2);
+		GetBalanceResponse balance2 = zdp.getBalance(privKey2);
 
 		System.out.println("Balance to:");
 		out(balance2);
 
-		String to = CryptoUtils.generateAccountUniqueAddress(pubKey2);
+		String to = CryptoUtils.generateUniqueAddressByPublicKey58(pubKey2);
 
 		// 1 -> 2 50 coins
 		BigDecimal amount = BigDecimal.valueOf(40.12345678);
 
-		SubmitTransactionResponse resp = zdp.transfer(privKey1, pubKey1, from, to, amount, "REF123");
+		SubmitTransactionResponse resp = zdp.transfer(privKey1, from, to, amount, "REF123");
 
 		assertNotNull(resp.getMetadata().getIsoDate());
 		assertNotNull(resp.getType());
@@ -90,7 +94,7 @@ public class TestSubmitTransaction extends BaseModelTest {
 
 		// count by account
 		{
-			CountResponse countResponse = zdp.getTransactionsCount(privKey1, pubKey1);
+			CountResponse countResponse = zdp.getTransactionsCount(privKey1);
 			out(countResponse);
 			long count = countResponse.getCount();
 
@@ -99,7 +103,7 @@ public class TestSubmitTransaction extends BaseModelTest {
 
 		// list by account
 		{
-			ListTransactionsResponse listResp = zdp.getTransactions(privKey1, pubKey1, 0, 10);
+			ListTransactionsResponse listResp = zdp.getTransactions(privKey1, 0, 10);
 			out(listResp);
 		}
 

@@ -1,18 +1,22 @@
 package io.zdp.client;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import io.zdp.api.model.v1.PingResponse;
-import io.zdp.client.impl.ZdpClientImpl;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({ "classpath:/test-spring-context.xml" })
 public class TestPing extends BaseModelTest {
+
+	@Autowired
+	private ZdpClient zdp;
 
 	@Test
 	public void test() throws Exception {
-
-		ZdpClientImpl zdp = new ZdpClientImpl();
-		zdp.init();
-		zdp.setHostUrl("http://localhost");
 
 		PingResponse resp = zdp.ping();
 		System.out.println(objectMapper.writeValueAsString(resp));

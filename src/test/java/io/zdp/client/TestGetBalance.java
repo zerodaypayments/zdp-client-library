@@ -1,24 +1,27 @@
 package io.zdp.client;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import io.zdp.api.model.v1.GetBalanceResponse;
-import io.zdp.client.impl.ZdpClientImpl;
-import junit.framework.TestCase;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({ "classpath:/test-spring-context.xml" })
 public class TestGetBalance extends BaseModelTest {
+
+	@Autowired
+	private ZdpClient zdp;
 
 	@Test
 	public void test() throws Exception {
 
-		ZdpClientImpl zdp = new ZdpClientImpl();
-		zdp.init();
-		zdp.setHostUrl("http://localhost");
-
 		String privKey1 = "5NMXiwArVTnTHbBPcrsHj7bzXig8Sf2np7Tg4j9ThGBv";
 		String pubKey1 = "xcStKZ3QgfiMuHSQBS4pjFRHDBArqpdiqPNni6diGWCn";
 
-		GetBalanceResponse balance = zdp.getBalance(privKey1, pubKey1);
+		GetBalanceResponse balance = zdp.getBalance(privKey1);
 
 		assertNotNull(balance);
 		assertNotNull(balance.getAmount());

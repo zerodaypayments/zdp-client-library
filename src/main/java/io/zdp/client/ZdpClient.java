@@ -42,17 +42,17 @@ public interface ZdpClient {
 	/**
 	 * Get unique address for an account
 	 */
-	GetAddressResponse getAddress(String privateKeyB58, String publicKeyB58) throws Exception;
+	GetAddressResponse getAddress(String privateKeyB58) throws Exception;
 
 	/**
 	 * Get account balance
 	 */
-	GetBalanceResponse getBalance(String privateKeyB58, String publicKeyB58) throws Exception;
+	GetBalanceResponse getBalance(String privateKeyB58) throws Exception;
 
 	/**
 	 * Submit transfer request (synchronous)
 	 */
-	SubmitTransactionResponse transfer(String privateKeyB58, String publicKeyB58, String from, String to,
+	SubmitTransactionResponse transfer(String privateKeyB58, String from, String to,
 			BigDecimal amount, String memo) throws Exception;
 
 	/**
@@ -63,13 +63,13 @@ public interface ZdpClient {
 	/**
 	 * Get transaction headers
 	 */
-	ListTransactionsResponse getTransactions(String privateKeyB58, String publicKeyB58, int page, int pageSize)
+	ListTransactionsResponse getTransactions(String privateKeyB58, int page, int pageSize)
 			throws Exception;
 
 	/**
 	 * Count transaction headers
 	 */
-	CountResponse getTransactionsCount(String privateKeyB58, String publicKeyB58) throws Exception;
+	CountResponse getTransactionsCount(String privateKeyB58) throws Exception;
 
 	/**
 	 * Public ledger: count accounts
