@@ -1,20 +1,10 @@
 package io.zdp.client;
 
-import java.math.BigDecimal;
-
-import org.bitcoinj.core.Base58;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import io.zdp.api.model.v1.CountResponse;
-import io.zdp.api.model.v1.GetBalanceResponse;
-import io.zdp.api.model.v1.GetTransactionDetailsResponse;
-import io.zdp.api.model.v1.ListTransactionsResponse;
-import io.zdp.api.model.v1.SubmitTransactionResponse;
-import io.zdp.common.crypto.CryptoUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath:/test-spring-context.xml" })
@@ -25,18 +15,13 @@ public class TestSubmitTransaction extends BaseModelTest {
 
 	@Test
 	public void test() throws Exception {
-
+/*
 		String privKey1 = "5NMXiwArVTnTHbBPcrsHj7bzXig8Sf2np7Tg4j9ThGBv";
-		String pubKey1 = Base58.encode(CryptoUtils.getPublicKeyFromPrivate(new java.math.BigInteger(org.bitcoinj.core.Base58.decode(privKey1)), true));
 
-		CryptoUtils.getPublicKeyFromPrivate(new java.math.BigInteger(org.bitcoinj.core.Base58.decode(privKey1)), true);
-
-		GetBalanceResponse balance1 = zdp.getBalance(privKey1);
+		GetBalanceResponse balance1 = zdp.getBalance(privKey1, Curves.DEFAULT_CURVE);
 
 		System.out.println("Balance from:");
 		out(balance1);
-
-		String from = CryptoUtils.generateUniqueAddressByPublicKey58(pubKey1);
 
 		System.out.println("From:");
 		out(from);
@@ -71,7 +56,7 @@ public class TestSubmitTransaction extends BaseModelTest {
 			out(tx);
 
 			assertNotNull(tx);
-			assertEquals(tx.getTxUuid().toLowerCase(), resp.getTxUuid().toLowerCase());
+			assertEquals(tx.getUuid().toLowerCase(), resp.getTxUuid().toLowerCase());
 		}
 
 		// tx by from address
@@ -80,7 +65,7 @@ public class TestSubmitTransaction extends BaseModelTest {
 			out(tx);
 
 			assertNotNull(tx);
-			assertEquals(tx.getTxUuid().toLowerCase(), resp.getTxUuid().toLowerCase());
+			assertEquals(tx.getUuid().toLowerCase(), resp.getTxUuid().toLowerCase());
 		}
 
 		// tx by to address
@@ -89,24 +74,9 @@ public class TestSubmitTransaction extends BaseModelTest {
 			out(tx);
 
 			assertNotNull(tx);
-			assertEquals(tx.getTxUuid().toLowerCase(), resp.getTxUuid().toLowerCase());
+			assertEquals(tx.getUuid().toLowerCase(), resp.getTxUuid().toLowerCase());
 		}
-
-		// count by account
-		{
-			CountResponse countResponse = zdp.getTransactionsCount(privKey1);
-			out(countResponse);
-			long count = countResponse.getCount();
-
-			assertEquals(1, count);
-		}
-
-		// list by account
-		{
-			ListTransactionsResponse listResp = zdp.getTransactions(privKey1, 0, 10);
-			out(listResp);
-		}
-
+*/
 	}
 
 }

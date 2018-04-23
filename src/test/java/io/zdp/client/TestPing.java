@@ -16,7 +16,7 @@ public class TestPing extends BaseModelTest {
 	private ZdpClient zdp;
 
 	@Test
-	public void test() throws Exception {
+	public void testS() throws Exception {
 
 		PingResponse resp = zdp.ping();
 		System.out.println(objectMapper.writeValueAsString(resp));

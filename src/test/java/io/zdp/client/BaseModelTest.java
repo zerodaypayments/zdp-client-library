@@ -11,13 +11,13 @@ import junit.framework.TestCase;
 @Ignore
 public class BaseModelTest extends TestCase {
 
-	protected final ObjectMapper objectMapper = new ObjectMapper();
+	public final ObjectMapper objectMapper = new ObjectMapper();
 
 	{
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 	}
 
-	protected void out(Object o) {
+	public void out(Object o) {
 		try {
 			System.out.println(objectMapper.writeValueAsString(o));
 		} catch (JsonProcessingException e) {

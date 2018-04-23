@@ -7,6 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import io.zdp.api.model.v1.GetBalanceResponse;
+import io.zdp.crypto.Curves;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath:/test-spring-context.xml" })
@@ -19,9 +20,8 @@ public class TestGetBalance extends BaseModelTest {
 	public void test() throws Exception {
 
 		String privKey1 = "5NMXiwArVTnTHbBPcrsHj7bzXig8Sf2np7Tg4j9ThGBv";
-		String pubKey1 = "xcStKZ3QgfiMuHSQBS4pjFRHDBArqpdiqPNni6diGWCn";
 
-		GetBalanceResponse balance = zdp.getBalance(privKey1);
+		GetBalanceResponse balance = zdp.getBalance(privKey1, Curves.DEFAULT_CURVE);
 
 		assertNotNull(balance);
 		assertNotNull(balance.getAmount());
