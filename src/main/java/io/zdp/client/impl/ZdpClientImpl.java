@@ -91,7 +91,6 @@ public class ZdpClientImpl implements ZdpClient {
 		final URI uri = new URI(hostUrl + Urls.URL_GET_BALANCE);
 
 		BigInteger privKey = Keys.toBigIntegerFromPrivateKeyBase58(privateKeyB58);
-		PrivateKey pvt = Keys.getPrivateKeyFromECBigIntAndCurve(privKey, curve);
 
 		final String publicKeyB58 = Keys.toZDPPublicKey(privKey, curve);
 
@@ -99,8 +98,6 @@ public class ZdpClientImpl implements ZdpClient {
 
 		final GetBalanceRequest req = new GetBalanceRequest();
 		req.setPublicKey(publicKeyB58);
-
-		req.setSignature(Signing.sign(pvt, publicKeyB58));
 
 		final GetBalanceResponse response = restTemplate.postForObject(uri, req, GetBalanceResponse.class);
 
