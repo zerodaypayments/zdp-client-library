@@ -1,9 +1,7 @@
 package io.zdp.client.impl;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.URI;
-import java.security.PrivateKey;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -25,8 +23,7 @@ import io.zdp.api.model.v1.SubmitTransactionResponse;
 import io.zdp.api.model.v1.Urls;
 import io.zdp.client.ZdpClient;
 import io.zdp.crypto.Hashing;
-import io.zdp.crypto.Keys;
-import io.zdp.crypto.Signing;
+import io.zdp.crypto.key.ZDPKeyPair;
 import io.zdp.crypto.mnemonics.Mnemonics.Language;
 
 @Component
@@ -90,14 +87,12 @@ public class ZdpClientImpl implements ZdpClient {
 
 		final URI uri = new URI(hostUrl + Urls.URL_GET_BALANCE);
 
-		BigInteger privKey = Keys.toBigIntegerFromPrivateKeyBase58(privateKeyB58);
-
-		final String publicKeyB58 = Keys.toZDPPublicKey(privKey, curve);
+		ZDPKeyPair kp = ZDPKeyPair.createFromPrivateKeyBase58(privateKeyB58, curve);
 
 		log.debug("getBalance: " + uri);
 
 		final GetBalanceRequest req = new GetBalanceRequest();
-		req.setPublicKey(publicKeyB58);
+		req.setAccountUuid(kp.getAccountUuid());
 
 		final GetBalanceResponse response = restTemplate.postForObject(uri, req, GetBalanceResponse.class);
 
@@ -110,25 +105,22 @@ public class ZdpClientImpl implements ZdpClient {
 
 		URI uri = new URI(hostUrl + Urls.URL_TRANSFER);
 
-		BigInteger privKey = Keys.toBigIntegerFromPrivateKeyBase58(privateKeyB58);
-		PrivateKey pvt = Keys.getPrivateKeyFromECBigIntAndCurve(privKey, curve);
-
-		final String publicKeyB58 = Keys.toZDPPublicKey(privKey, curve);
+		ZDPKeyPair kp = ZDPKeyPair.createFromPrivateKeyBase58(privateKeyB58, curve);
 
 		log.debug("transfer: " + uri);
 
 		SubmitTransactionRequest req = new SubmitTransactionRequest();
 
 		req.setAmount(amount.toPlainString());
-		req.setFromAddress(from);
+		req.setFrom(from);
 		req.setMemo(memo);
-		req.setPublicKey(publicKeyB58);
 		req.setRequestUuid(UUID.randomUUID().toString());
-		req.setToAddress(to);
+		req.setPublicKey(kp.getPublicKeyAsBase58());
+		req.setTo(to);
 
 		byte[] signature = Hashing.hashTransactionSignature(from + amount.toPlainString() + to);
 
-		req.setSignature(Signing.sign(pvt, signature));
+		req.setSignature(kp.sign(signature));
 
 		return restTemplate.postForObject(uri, req, SubmitTransactionResponse.class);
 	}
