@@ -25,10 +25,10 @@ public class TestGetBalance extends BaseModelTest {
 
 		assertNotNull(balance);
 		assertNotNull(balance.getAmount());
-		assertNotNull(balance.getMetadata().getIsoDate());
+		assertNotNull(balance.getResponseMetadata().getIsoDate());
 		assertNotNull(balance.getType());
-		assertNotNull(balance.getMetadata().getUuid());
-		assertNotNull(balance.getMetadata().getDate());
+		assertNotNull(balance.getResponseMetadata().getUuid());
+		assertNotNull(balance.getResponseMetadata().getDate());
 
 		System.out.println(objectMapper.writeValueAsString(balance));
 

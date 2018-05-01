@@ -92,7 +92,7 @@ public class ZdpClientImpl implements ZdpClient {
 		log.debug("getBalance: " + uri);
 
 		final GetBalanceRequest req = new GetBalanceRequest();
-		req.setAccountUuid(kp.getAccountUuid());
+		req.setAccountUuid(kp.getZDPAccount().getUuid());
 
 		final GetBalanceResponse response = restTemplate.postForObject(uri, req, GetBalanceResponse.class);
 

@@ -23,10 +23,10 @@ public class TestGetFee extends BaseModelTest {
 
 		assertNotNull(fee);
 		assertNotNull(fee.getFee());
-		assertNotNull(fee.getMetadata().getIsoDate());
+		assertNotNull(fee.getResponseMetadata().getIsoDate());
 		assertNotNull(fee.getType());
-		assertNotNull(fee.getMetadata().getUuid());
-		assertNotNull(fee.getMetadata().getDate());
+		assertNotNull(fee.getResponseMetadata().getUuid());
+		assertNotNull(fee.getResponseMetadata().getDate());
 
 	}
 

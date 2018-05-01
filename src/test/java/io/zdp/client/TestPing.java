@@ -22,10 +22,10 @@ public class TestPing extends BaseModelTest {
 		System.out.println(objectMapper.writeValueAsString(resp));
 
 		assertNotNull(resp);
-		assertNotNull(resp.getMetadata().getIsoDate());
+		assertNotNull(resp.getResponseMetadata().getIsoDate());
 		assertNotNull(resp.getType());
-		assertNotNull(resp.getMetadata().getUuid());
-		assertNotNull(resp.getMetadata().getDate());
+		assertNotNull(resp.getResponseMetadata().getUuid());
+		assertNotNull(resp.getResponseMetadata().getDate());
 
 	}
 
