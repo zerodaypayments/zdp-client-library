@@ -18,8 +18,8 @@ import io.zdp.api.model.v1.GetFeeResponse;
 import io.zdp.api.model.v1.GetNewAccountResponse;
 import io.zdp.api.model.v1.GetTransactionDetailsResponse;
 import io.zdp.api.model.v1.PingResponse;
-import io.zdp.api.model.v1.SubmitTransactionRequest;
-import io.zdp.api.model.v1.SubmitTransactionResponse;
+import io.zdp.api.model.v1.TransferRequest;
+import io.zdp.api.model.v1.TransferResponse;
 import io.zdp.api.model.v1.Urls;
 import io.zdp.client.ZdpClient;
 import io.zdp.crypto.Hashing;
@@ -101,7 +101,7 @@ public class ZdpClientImpl implements ZdpClient {
 	}
 
 	@Override
-	public SubmitTransactionResponse transfer(String privateKeyB58, String curve, String from, String to, BigDecimal amount, String memo) throws Exception {
+	public TransferResponse transfer(String privateKeyB58, String curve, String from, String to, BigDecimal amount, String memo) throws Exception {
 
 		URI uri = new URI(hostUrl + Urls.URL_TRANSFER);
 
@@ -109,7 +109,7 @@ public class ZdpClientImpl implements ZdpClient {
 
 		log.debug("transfer: " + uri);
 
-		SubmitTransactionRequest req = new SubmitTransactionRequest();
+		TransferRequest req = new TransferRequest();
 
 		req.setAmount(amount.toPlainString());
 		req.setFrom(from);
@@ -122,7 +122,7 @@ public class ZdpClientImpl implements ZdpClient {
 
 		req.setSignature(kp.sign(signature));
 
-		return restTemplate.postForObject(uri, req, SubmitTransactionResponse.class);
+		return restTemplate.postForObject(uri, req, TransferResponse.class);
 	}
 
 	@Override

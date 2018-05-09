@@ -7,7 +7,7 @@ import io.zdp.api.model.v1.GetFeeResponse;
 import io.zdp.api.model.v1.GetNewAccountResponse;
 import io.zdp.api.model.v1.GetTransactionDetailsResponse;
 import io.zdp.api.model.v1.PingResponse;
-import io.zdp.api.model.v1.SubmitTransactionResponse;
+import io.zdp.api.model.v1.TransferResponse;
 import io.zdp.crypto.mnemonics.Mnemonics.Language;
 
 public interface ZdpClient {
@@ -36,7 +36,7 @@ public interface ZdpClient {
 	/**
 	 * Submit transfer request (synchronous)
 	 */
-	SubmitTransactionResponse transfer(String privateKeyB58, String curve, String from, String to, BigDecimal amount, String memo) throws Exception;
+	TransferResponse transfer(String privateKeyB58, String curve, String from, String to, BigDecimal amount, String memo) throws Exception;
 
 	/**
 	 * Get transaction details by tx uuid
