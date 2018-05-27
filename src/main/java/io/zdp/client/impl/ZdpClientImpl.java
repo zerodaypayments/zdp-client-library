@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,6 +25,7 @@ import io.zdp.client.ZdpClient;
 import io.zdp.crypto.Hashing;
 import io.zdp.crypto.key.ZDPKeyPair;
 import io.zdp.crypto.mnemonics.Mnemonics.Language;
+import io.zdp.model.network.NetworkTopologyService;
 
 @Component
 public class ZdpClientImpl implements ZdpClient {
@@ -33,30 +34,28 @@ public class ZdpClientImpl implements ZdpClient {
 
 	private RestTemplate restTemplate;
 
-	@Value("${zdp.api.host}")
 	private String hostUrl;
+
+	@Autowired
+	private NetworkTopologyService networkTopologyService;
 
 	@PostConstruct
 	public void init() {
-
-		log.debug("Host url: " + hostUrl);
-
 		restTemplate = new RestTemplate();
-
 	}
 
 	public String getHostUrl() {
-		return hostUrl;
-	}
-
-	public void setHostUrl(String hostUrl) {
-		this.hostUrl = hostUrl;
+		if (hostUrl == null) {
+			return networkTopologyService.getRandomNode().getHttpBaseUrl();
+		} else {
+			return hostUrl;
+		}
 	}
 
 	@Override
 	public PingResponse ping() throws Exception {
 
-		URI uri = new URI(hostUrl + Urls.URL_PING);
+		URI uri = new URI(getHostUrl() + Urls.URL_PING);
 
 		log.debug("ping: " + uri);
 
@@ -67,7 +66,7 @@ public class ZdpClientImpl implements ZdpClient {
 	@Override
 	public GetFeeResponse getFee() throws Exception {
 
-		final URI uri = new URI(hostUrl + Urls.URL_GET_TX_FEE);
+		final URI uri = new URI(getHostUrl() + Urls.URL_GET_TX_FEE);
 
 		return restTemplate.getForObject(uri, GetFeeResponse.class);
 
@@ -76,7 +75,7 @@ public class ZdpClientImpl implements ZdpClient {
 	@Override
 	public GetNewAccountResponse getNewAccount(String curve, Language language) throws Exception {
 
-		final URI uri = new URI(hostUrl + Urls.URL_GET_NEW_ACCOUNT);
+		final URI uri = new URI(getHostUrl() + Urls.URL_GET_NEW_ACCOUNT);
 
 		return restTemplate.getForObject(uri, GetNewAccountResponse.class);
 
@@ -85,7 +84,7 @@ public class ZdpClientImpl implements ZdpClient {
 	@Override
 	public GetBalanceResponse getBalance(String privateKeyB58, String curve) throws Exception {
 
-		final URI uri = new URI(hostUrl + Urls.URL_GET_BALANCE);
+		final URI uri = new URI(getHostUrl() + Urls.URL_GET_BALANCE);
 
 		ZDPKeyPair kp = ZDPKeyPair.createFromPrivateKeyBase58(privateKeyB58, curve);
 
@@ -103,7 +102,7 @@ public class ZdpClientImpl implements ZdpClient {
 	@Override
 	public TransferResponse transfer(String privateKeyB58, String curve, String from, String to, BigDecimal amount, String memo) throws Exception {
 
-		URI uri = new URI(hostUrl + Urls.URL_TRANSFER);
+		URI uri = new URI(getHostUrl() + Urls.URL_TRANSFER);
 
 		ZDPKeyPair kp = ZDPKeyPair.createFromPrivateKeyBase58(privateKeyB58, curve);
 
@@ -128,11 +127,16 @@ public class ZdpClientImpl implements ZdpClient {
 	@Override
 	public GetTransactionDetailsResponse getTransactionDetails(String uuid) throws Exception {
 
-		final URI uri = new URI(hostUrl + Urls.URL_GET_TX_DETAILS + uuid);
+		final URI uri = new URI(getHostUrl() + Urls.URL_GET_TX_DETAILS + uuid);
 
 		final GetTransactionDetailsResponse response = restTemplate.getForObject(uri, GetTransactionDetailsResponse.class);
 
 		return response;
+	}
+
+	@Override
+	public void setHostUrl(String url) {
+		this.hostUrl = url;
 	}
 
 }

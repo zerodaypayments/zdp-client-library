@@ -12,6 +12,10 @@ import io.zdp.crypto.mnemonics.Mnemonics.Language;
 
 public interface ZdpClient {
 
+	String getHostUrl();
+	
+	void setHostUrl(String url);
+		
 	/**
 	 * Ping network
 	 */
