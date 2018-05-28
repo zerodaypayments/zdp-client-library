@@ -9,13 +9,14 @@ import io.zdp.api.model.v1.GetTransactionDetailsResponse;
 import io.zdp.api.model.v1.PingResponse;
 import io.zdp.api.model.v1.TransferResponse;
 import io.zdp.crypto.mnemonics.Mnemonics.Language;
+import io.zdp.model.network.NetworkNode;
 
 public interface ZdpClient {
 
 	String getHostUrl();
 	
-	void setHostUrl(String url);
-		
+	void setNetworkNode(NetworkNode node);
+	
 	/**
 	 * Ping network
 	 */
